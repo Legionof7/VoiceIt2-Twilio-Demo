@@ -56,15 +56,15 @@ const incomingCall = async (req, res) => {
     // User already exists
     if(jsonResponse.exists === true) {
       // Greet the caller when their account profile is recognized by the VoiceIt API.
-      speak(twiml, "Yo yo yo, what's up Welcome back to the Matrix23 Demo, your phone number has been recognized");
+      speak(twiml, "Yo yo yo, what's up. Welcome back to the Matrix23 Demo, your phone number has been recognized");
       // Let's provide the caller with an opportunity to enroll by typing `1` on
       // their phone's keypad. Use the <Gather> verb to collect user input
       const gather = twiml.gather({
         action: '/enroll_or_verify',
         numDigits: 1,
-        timeout: 5
+        timeout: 3
       });
-      speak(gather, "You may now log in, or press one to re enroll");
+      speak(gather, "You may now access your wallet, or press one to re enroll. ");
       twiml.redirect('/enroll_or_verify?digits=TIMEOUT');
       res.type('text/xml');
       res.send(twiml.toString());
@@ -106,7 +106,7 @@ const enrollOrVerify = async (req, res) => {
       userId: userId,
       }, async (jsonResponse)=>{
         console.log("deleteAllVoiceEnrollments JSON: ", jsonResponse.message);
-        speak(twiml, "You have chosen to re register your voice, you will now be asked to say a phrase three times, then you will be able to log in with that phrase");
+        speak(twiml, "You have chosen to re register your voice, you will now be asked to say a phrase three times, then you will be able to access your wallet with that phrase");
         twiml.redirect('/enroll');
         res.type('text/xml');
         res.send(twiml.toString());
@@ -168,7 +168,7 @@ const processEnrollment = async (req, res) => {
       enrollCount++;
       // VoiceIt requires at least 3 successful enrollments.
       if (enrollCount > 2) {
-        speak(twiml, 'Thank you, recording received, you are now enrolled and ready to log in');
+        speak(twiml, 'Thank you, recording received, you are now enrolled and ready to access your wallet.');
         twiml.redirect('/verify');
       } else {
         speak(twiml, 'Thank you, recording received, you will now be asked to record your phrase again');
@@ -236,7 +236,7 @@ const processVerification = async (req, res) => {
       if (jsonResponse.responseCode == "SUCC") {
         speak(twiml, 'Verification successful!');
         speak(twiml,'You have accessed your Ethereum wallet! Your private key is beepboopbop. If you would like to send Ethereum, say Send. Just kidding this does not work yet.');
-        //Hang up
+        
       } else if (numTries > 2) {
         //3 attempts failed
         speak(twiml,'Too many failed attempts. Please call back and select option 1 to re enroll and verify again.');
