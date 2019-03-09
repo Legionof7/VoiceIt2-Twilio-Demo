@@ -56,7 +56,7 @@ const incomingCall = async (req, res) => {
     // User already exists
     if(jsonResponse.exists === true) {
       // Greet the caller when their account profile is recognized by the VoiceIt API.
-      speak(twiml, "Welcome back to the Voice It Verification Demo, your phone number has been recognized");
+      speak(twiml, "Yo yo yo, what's up Welcome back to the Matrix23 Demo, your phone number has been recognized");
       // Let's provide the caller with an opportunity to enroll by typing `1` on
       // their phone's keypad. Use the <Gather> verb to collect user input
       const gather = twiml.gather({
@@ -72,7 +72,7 @@ const incomingCall = async (req, res) => {
     } else {
       // Create a new user for new number
       myVoiceIt.createUser(async (jsonResponse)=>{
-        speak(twiml, "Welcome to the Voice It Verification Demo, you are a new user and will now be enrolled");
+        speak(twiml, "Hello, welcome to the Matrix23 Demo, you are a noob user and will now be assimilated ahem I mean registered");
         try {
           const client = await pool.connect()
           const result = await client.query('insert into users values ('+ phone +', \'' + jsonResponse.userId + '\')');
@@ -106,7 +106,7 @@ const enrollOrVerify = async (req, res) => {
       userId: userId,
       }, async (jsonResponse)=>{
         console.log("deleteAllVoiceEnrollments JSON: ", jsonResponse.message);
-        speak(twiml, "You have chosen to re enroll your voice, you will now be asked to say a phrase three times, then you will be able to log in with that phrase");
+        speak(twiml, "You have chosen to re register your voice, you will now be asked to say a phrase three times, then you will be able to log in with that phrase");
         twiml.redirect('/enroll');
         res.type('text/xml');
         res.send(twiml.toString());
@@ -235,7 +235,7 @@ const processVerification = async (req, res) => {
 
       if (jsonResponse.responseCode == "SUCC") {
         speak(twiml, 'Verification successful!');
-        speak(twiml,'Thank you for calling voice its voice biometrics demo. Have a nice day!');
+        speak(twiml,'You have accessed your Ethereum wallet! Your private key is beepboopbop. If you would like to send Ethereum, say Send. Just kidding this does not work yet.');
         //Hang up
       } else if (numTries > 2) {
         //3 attempts failed
